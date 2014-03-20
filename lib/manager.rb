@@ -9,7 +9,7 @@ module Backup
       s = {}
       s[:db_version]         = "#{ActiveRecord::Migrator.current_version}"
       s[:backup_created_at]  = Time.now
-      s[:gitlab_version]     = Redmine::VERSION
+      s[:redmine_version]    = Redmine::VERSION.to_s
       s[:tar_version]        = tar_version
 
       Dir.chdir(Setting.plugin_redmine_backup_task[:redmine_backup_dir])
@@ -102,15 +102,7 @@ module Backup
     end
 
     def tar_version
-      vars = { 'PWD' => Dir.pwd }
-      # cmd_output = ""
-      # cmd_status = 0
       tar_version = `tar --version`
-      # tar_version, _ = Open3.popen3(vars, %W(tar --version)) do |stdin, stdout, stderr, wait_thr|
-        # cmd_output << stdout.read
-        # cmd_output << stderr.read
-        # cmd_status = wait_thr.value.exitstatus
-      # end
       tar_version.split("\n").first
     end
   end

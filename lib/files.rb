@@ -5,7 +5,7 @@ module Backup
     def initialize
       @app_uploads_dir = File.realpath(Attachment.storage_path)
       @backup_dir = Setting.plugin_redmine_backup_task[:redmine_backup_dir]
-      @backup_uploads_dir = File.join(@backup_dir, 'uploads')
+      @backup_uploads_dir = File.join(@backup_dir, 'files')
     end
 
     # Copy uploads from public/uploads to backup/uploads
@@ -21,7 +21,7 @@ module Backup
     end
 
     def backup_existing_uploads_dir
-      timestamped_uploads_path = File.join(app_uploads_dir, '..', "uploads.#{Time.now.to_i}")
+      timestamped_uploads_path = File.join(app_uploads_dir, '..', "files.#{Time.now.to_i}")
       if File.exists?(app_uploads_dir)
         FileUtils.mv(app_uploads_dir, timestamped_uploads_path)
       end
