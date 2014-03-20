@@ -6,7 +6,7 @@ module Backup
 
     def initialize
       @config = YAML.load_file(File.join(Rails.root,'config','database.yml'))[Rails.env]
-      @db_dir = File.join(Setting.plugin_redmine_backup_supporter[:redmine_backup_dir], 'db')
+      @db_dir = File.join(Setting.plugin_redmine_backup_task[:redmine_backup_dir], 'db')
       FileUtils.mkdir_p(@db_dir) unless Dir.exists?(@db_dir)
     end
 

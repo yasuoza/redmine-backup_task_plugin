@@ -1,5 +1,5 @@
-Redmine::Plugin.register :redmine_backup_supporter do
-  name 'Redmine Backup Supporter plugin'
+Redmine::Plugin.register :redmine_backup_task do
+  name 'Redmine Backup Task plugin'
   author 'Author name'
   description 'This is a plugin for Redmine'
   version '0.0.1'

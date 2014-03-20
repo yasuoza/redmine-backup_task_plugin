@@ -4,7 +4,7 @@ module Backup
 
     def initialize
       @app_uploads_dir = File.realpath(Attachment.storage_path)
-      @backup_dir = Setting.plugin_redmine_backup_supporter[:redmine_backup_dir]
+      @backup_dir = Setting.plugin_redmine_backup_task[:redmine_backup_dir]
       @backup_uploads_dir = File.join(@backup_dir, 'uploads')
     end
 
