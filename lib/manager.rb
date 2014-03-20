@@ -60,7 +60,7 @@ module Backup
     end
 
     def unpack
-      Dir.chdir(Gitlab.config.backup.path)
+      Dir.chdir(Setting.plugin_redmine_backup_task[:redmine_backup_dir])
 
       # check for existing backups in the backup dir
       file_list = Dir.glob("*_gitlab_backup.tar").each.map { |f| f.split(/_/).first.to_i }
@@ -90,7 +90,7 @@ module Backup
       ENV["VERSION"] = "#{settings[:db_version]}" if settings[:db_version].to_i > 0
 
       # restoring mismatching backups can lead to unexpected problems
-      if settings[:gitlab_version] != Redmine::VERSION
+      if settings[:redmine_version] != Redmine::VERSION.to_s
         puts "GitLab version mismatch:"
         puts "  Your current GitLab version (#{Redmine::VERSION}) differs from the GitLab version in the backup!"
         puts "  Please switch to the following version and try again:"
