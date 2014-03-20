@@ -39,7 +39,7 @@ module Backup
     def remove_old
       # delete backups
       print "Deleting old backups ... "
-      keep_time = ENV['DEDMINE_BACKUP_KEEP_TIME'] || 0
+      keep_time = ENV['REDMINE_BACKUP_KEEP_TIME'] || 0
       path = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
 
       if keep_time > 0
