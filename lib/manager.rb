@@ -1,5 +1,3 @@
-require 'open3'
-
 module Backup
   class Manager
     BACKUP_CONTENTS = %w{db/ files/ backup_information.yml}
@@ -19,8 +17,8 @@ module Backup
       end
 
       # create archive
-      print "Creating backup archive: #{s[:backup_created_at].to_i}_gitlab_backup.tar ... "
-      if Kernel.system('tar', '-cf', "#{s[:backup_created_at].to_i}_gitlab_backup.tar", *BACKUP_CONTENTS)
+      print "Creating backup archive: #{s[:backup_created_at].to_i}_redmine_backup.tar ... "
+      if Kernel.system('tar', '-cf', "#{s[:backup_created_at].to_i}_redmine_backup.tar", *BACKUP_CONTENTS)
         puts "done"
       else
         puts "failed"
@@ -44,11 +42,11 @@ module Backup
 
       if keep_time > 0
         removed = 0
-        file_list = Dir.glob(Rails.root.join(path, "*_gitlab_backup.tar"))
-        file_list.map! { |f| $1.to_i if f =~ /(\d+)_gitlab_backup.tar/ }
+        file_list = Dir.glob(Rails.root.join(path, "*_redmine_backup.tar"))
+        file_list.map! { |f| $1.to_i if f =~ /(\d+)_redmine_backup.tar/ }
         file_list.sort.each do |timestamp|
           if Time.at(timestamp) < (Time.now - keep_time)
-            if Kernel.system(*%W(rm #{timestamp}_gitlab_backup.tar))
+            if Kernel.system(*%W(rm #{timestamp}_redmine_backup.tar))
               removed += 1
             end
           end
@@ -63,15 +61,15 @@ module Backup
       Dir.chdir(Setting.plugin_redmine_backup_task[:redmine_backup_dir])
 
       # check for existing backups in the backup dir
-      file_list = Dir.glob("*_gitlab_backup.tar").each.map { |f| f.split(/_/).first.to_i }
+      file_list = Dir.glob("*_redmine_backup.tar").each.map { |f| f.split(/_/).first.to_i }
       puts "no backups found" if file_list.count == 0
       if file_list.count > 1 && ENV["BACKUP"].nil?
         puts "Found more than one backup, please specify which one you want to restore:"
-        puts "rake gitlab:backup:restore BACKUP=timestamp_of_backup"
+        puts "rake redmine:backup:restore BACKUP=timestamp_of_backup"
         exit 1
       end
 
-      tar_file = ENV["BACKUP"].nil? ? File.join("#{file_list.first}_gitlab_backup.tar") : File.join(ENV["BACKUP"] + "_gitlab_backup.tar")
+      tar_file = ENV["BACKUP"].nil? ? File.join("#{file_list.first}_redmine_backup.tar") : File.join(ENV["BACKUP"] + "_redmine_backup.tar")
 
       unless File.exists?(tar_file)
         puts "The specified backup doesn't exist!"
@@ -91,13 +89,10 @@ module Backup
 
       # restoring mismatching backups can lead to unexpected problems
       if settings[:redmine_version] != Redmine::VERSION.to_s
-        puts "GitLab version mismatch:"
-        puts "  Your current GitLab version (#{Redmine::VERSION}) differs from the GitLab version in the backup!"
-        puts "  Please switch to the following version and try again:"
-        puts "  version: #{settings[:gitlab_version]}"
-        puts
-        puts "Hint: git checkout v#{settings[:gitlab_version]}"
-        exit 1
+        puts "Redmine version mismatch:"
+        puts "  Your current Redmine version (#{Redmine::VERSION}) differs from the Redmine version in the backup!"
+        puts "  You may need to run upgrade task. Refer to:"
+        puts "  http://www.redmine.org/projects/redmine/wiki/RedmineUpgrade#Step-3-Perform-the-upgrade"
       end
     end
 
