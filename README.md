@@ -50,6 +50,11 @@ Of course, you can choose custom backup directory and specified backup file.
 $ RAILS_ENV=production REDMINE_BACKUP_DIR=~/backup BACKUP=1395303655 rake redmine:backup:restore
 ```
 
+## Support
+
+* Redmine ~> 2.2
+
+
 ## LICENSE
 
 [GNU General Public License v2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
