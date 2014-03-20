@@ -10,9 +10,11 @@ module Backup
       s[:redmine_version]    = Redmine::VERSION.to_s
       s[:tar_version]        = tar_version
 
-      Dir.chdir(Setting.plugin_redmine_backup_task[:redmine_backup_dir])
+      backup_dir = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
 
-      File.open("#{Setting.plugin_redmine_backup_task[:redmine_backup_dir]}/backup_information.yml", "w+") do |file|
+      Dir.chdir(backup_dir)
+
+      File.open("#{backup_dir}/backup_information.yml", "w+") do |file|
         file << s.to_yaml.gsub(/^---\n/,'')
       end
 
@@ -37,8 +39,8 @@ module Backup
     def remove_old
       # delete backups
       print "Deleting old backups ... "
-      keep_time = Setting.plugin_redmine_backup_task[:redmine_backup_keep_time]
-      path = Setting.plugin_redmine_backup_task[:redmine_backup_dir]
+      keep_time = ENV['DEDMINE_BACKUP_KEEP_TIME'] || 0
+      path = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
 
       if keep_time > 0
         removed = 0
@@ -58,7 +60,7 @@ module Backup
     end
 
     def unpack
-      Dir.chdir(Setting.plugin_redmine_backup_task[:redmine_backup_dir])
+      Dir.chdir(ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp'))
 
       # check for existing backups in the backup dir
       file_list = Dir.glob("*_redmine_backup.tar").each.map { |f| f.split(/_/).first.to_i }
