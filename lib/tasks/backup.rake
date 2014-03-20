@@ -6,8 +6,8 @@ namespace :redmine do
   namespace :backup do
     desc 'Create redmine backup'
     task create: :environment do
-      Rake::Task["backup:db:create"].invoke
-      Rake::Task["backup:files:create"].invoke
+      Rake::Task["redmine:backup:db:create"].invoke
+      Rake::Task["redmine:backup:files:create"].invoke
 
       backup = Backup::Manager.new
       backup.pack
@@ -20,8 +20,8 @@ namespace :redmine do
       backup = Backup::Manager.new
       backup.unpack
 
-      Rake::Task["backup:db:restore"].invoke
-      Rake::Task["backup:files:restore"].invoke
+      Rake::Task["redmine:backup:db:restore"].invoke
+      Rake::Task["redmine:backup:files:restore"].invoke
 
       backup.cleanup
     end
