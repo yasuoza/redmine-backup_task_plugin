@@ -4,7 +4,7 @@ module Backup
 
     def initialize
       @app_uploads_dir    = File.realpath(Attachment.storage_path)
-      @backup_dir         = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
+      @backup_dir         = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp', 'backups')
       @backup_uploads_dir = File.join(@backup_dir, 'files')
     end
 

@@ -10,7 +10,7 @@ module Backup
       s[:redmine_version]    = Redmine::VERSION.to_s
       s[:tar_version]        = tar_version
 
-      backup_dir = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
+      backup_dir = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp', 'backups')
 
       Dir.chdir(backup_dir)
 
@@ -40,7 +40,7 @@ module Backup
       # delete backups
       print "Deleting old backups ... "
       keep_time = ENV['REDMINE_BACKUP_KEEP_TIME'] || 0
-      path = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')
+      path = ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp', 'backups')
 
       if keep_time > 0
         removed = 0
@@ -60,7 +60,7 @@ module Backup
     end
 
     def unpack
-      Dir.chdir(ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp'))
+      Dir.chdir(ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp', 'backups'))
 
       # check for existing backups in the backup dir
       file_list = Dir.glob("*_redmine_backup.tar").each.map { |f| f.split(/_/).first.to_i }

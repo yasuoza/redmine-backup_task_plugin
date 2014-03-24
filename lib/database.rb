@@ -6,7 +6,7 @@ module Backup
 
     def initialize
       @config = YAML.load_file(File.join(Rails.root,'config','database.yml'))[Rails.env]
-      @db_dir = File.join((ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp')), 'db')
+      @db_dir = File.join((ENV['REDMINE_BACKUP_DIR'] || Rails.root.join('tmp', 'backups')), 'db')
       FileUtils.mkdir_p(@db_dir) unless Dir.exists?(@db_dir)
     end
 
