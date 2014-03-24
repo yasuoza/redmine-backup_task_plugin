@@ -18,7 +18,7 @@ Otherwise, download zip from `Download Zip` button on GitHub. Maybe you can see 
 
 ## Create a backup
 
-This plugin backups `files` directory and db dump. (If you set `attachments_storage_path` variable in `config/configuration.yml`, this plugin backups the directory.)
+This plugin backups `files` directory and db dump to `tmp/backups` directory. (If you set `attachments_storage_path` variable in `config/configuration.yml`, this plugin backups the directory.)
 
 ```
 $ RAILS_ENV=production rake redmine:backup:create
